@@ -40,7 +40,7 @@ namespace TgVozderzhansBot.Core.TgBot.CommandHandlers
             {
                 Models.User friend = userRepository.GetUserById(friendId);
                 
-                IEnumerable<AbsItem> histories = absItemRepository.GetHistory(userId, 10);
+                IEnumerable<AbsItem> histories = absItemRepository.GetHistory(friendId, 10);
 
                 string txt = $"<b>Лог воздержания пользователя @{friend.Username}:</b>\n\n";
 

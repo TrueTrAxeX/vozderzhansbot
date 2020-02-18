@@ -87,6 +87,20 @@ namespace TgVozderzhansBot.Core.DbRepositories
             }
         }
 
+        public long? GetUserIdByNickname(string nickname)
+        {
+            using (var conn = SqliteBaseRepository.SimpleDbConnection())
+            {
+                conn.Open();
+
+                string sqlQuery = $"SELECT id FROM Users WHERE Username = @Nickname";
+
+                long? user = conn.QuerySingleOrDefault<long?>(sqlQuery, new { Nickname = nickname });
+
+                return user;
+            }
+        }
+        
         public long? GetPublicUserIdByNickname(string nickname)
         {
             using (var conn = SqliteBaseRepository.SimpleDbConnection())
@@ -126,6 +140,20 @@ namespace TgVozderzhansBot.Core.DbRepositories
                 IEnumerable<User> users = conn.Query<User>(sqlQuery, sqlQuery);
 
                 return users;
+            }
+        }
+
+        public User GetUserById(long id)
+        {
+            using (var conn = SqliteBaseRepository.SimpleDbConnection())
+            {
+                conn.Open();
+
+                string sqlQuery = $"SELECT * FROM Users WHERE id = @UserId";
+
+                User user = conn.QuerySingle<User>(sqlQuery, new { UserId = id });
+
+                return user;
             }
         }
 

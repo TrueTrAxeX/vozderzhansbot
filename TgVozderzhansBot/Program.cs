@@ -22,6 +22,7 @@ namespace TgVozderzhansBot
             AbsItemRepository absItemRepository = new AbsItemRepository();
 
             WarningsRepository.CreateTable();
+            FriendsRepository.CreateTable();
             WarningsRepository.CreateWarningsIfNotExists();
             WarningsRepository.GetUnnotifiedWarnings();
             
@@ -32,8 +33,19 @@ namespace TgVozderzhansBot
             
             WarningsWorker worker = new WarningsWorker(tgBot.TelegramBotClient);
             worker.Start();
+
+            MassMessagePoster.Start(tgBot.TelegramBotClient);
             
             tgBot.AddCommandHandlers(
+                typeof(CancelInviteCommandHandler),
+                typeof(BreakFriendshipCommandHandler),
+                typeof(FriendAbortHistoryCommandHandler),
+                typeof(SelectFriendCommandHandler),
+                typeof(FriendListCommandHandler),
+                typeof(AcceptInviteCommandHandler),
+                typeof(AddFriendInputCommandHandler),
+                typeof(AddFriendCommandHandler),
+                typeof(FriendsMenuCommandHandler),
                 typeof(GetTopUsersCommandHandler),
                 typeof(ConfirmAbsistenceCommandHandler),
                 typeof(GetUserTermInfoCommandHandler),

@@ -171,12 +171,8 @@ namespace TgVozderzhansBot.Core.DbRepositories
             }
         }
 
-        public bool StopAbsistence(long chatId)
+        public bool StopAbsistence(long userId)
         {
-            UserRepository userRepository = new UserRepository();
-
-            long userId = userRepository.GetUserIdByChatId(chatId);
-            
             using (var conn = SqliteBaseRepository.SimpleDbConnection())
             {
                 conn.Open();

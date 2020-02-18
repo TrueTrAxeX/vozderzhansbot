@@ -41,14 +41,16 @@ namespace TgVozderzhansBot.Core.TgBot.CommandHandlers
             
             await Client.SendTextMessageAsync(update.Message.Chat.Id, "Приветствуем Вас! Этот бот поможет вам вести свой дневник воздержания", replyMarkup: new ReplyKeyboardMarkup()
             {
-                Keyboard = new []{ new List<KeyboardButton>()
-                {
-                    new KeyboardButton("💪 Мое воздержание"),
-                    new KeyboardButton("〽️TOP пользователей")
-                },
+                Keyboard = new []{ 
                     new List<KeyboardButton>()
                     {
-                        new KeyboardButton("⚙️Настройки")
+                        new KeyboardButton("💪 Мое воздержание"),
+                        new KeyboardButton("〽️ TOP пользователей")
+                    },
+                    new List<KeyboardButton>()
+                    {
+                        new KeyboardButton("👬 Мои друзья"),
+                        new KeyboardButton("⚙️ Настройки")
                     }
                 },
                 ResizeKeyboard = true

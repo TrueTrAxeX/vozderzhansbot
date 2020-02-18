@@ -40,6 +40,8 @@ namespace TgVozderzhansBot.Core.TgBot.CommandHandlers
 
             int stars = AbsItemRepository.GetUserStarsCount(userId);
 
+            if (stars == 0) stars = 1;
+            
             for (int i = 0; i < stars; i++)
             {
                 rating += "⭐";

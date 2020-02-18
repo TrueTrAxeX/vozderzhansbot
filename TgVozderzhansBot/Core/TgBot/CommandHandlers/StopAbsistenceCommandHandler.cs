@@ -3,6 +3,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using TgVozderzhansBot.Core.DbRepositories;
+using TgVozderzhansBot.Core.Workers;
 
 namespace TgVozderzhansBot.Core.TgBot.CommandHandlers
 {
@@ -41,7 +42,20 @@ namespace TgVozderzhansBot.Core.TgBot.CommandHandlers
             {
                 await Client.DeleteMessageAsync(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.Message.MessageId);
 
-                absItemRepository.StopAbsistence(update.CallbackQuery.Message.Chat.Id);
+                UserRepository userRepository = new UserRepository();
+                
+                long userId = userRepository.GetUserIdByChatId(update.CallbackQuery.Message.Chat.Id);
+
+                var user = userRepository.GetUserById(userId);
+                
+                absItemRepository.StopAbsistence(userId);
+
+                var allFriends = FriendsRepository.GetFriends(userId);
+
+                foreach (var f in allFriends)
+                {
+                    MassMessagePoster.Add(f.ChatId, $"Оповещаем вас, что ваш друг с ником @{user.Username} сорвался.");
+                }
                 
                 await Client.SendTextMessageAsync(update.CallbackQuery.Message.Chat.Id,
                     "Ваш срыв учтен, вы можете начать воздерживаться заново");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Dapper;
+using Newtonsoft.Json.Linq;
 using TgVozderzhansBot.Core.Models;
 
 namespace TgVozderzhansBot.Core.DbRepositories
@@ -15,6 +16,53 @@ namespace TgVozderzhansBot.Core.DbRepositories
             public DateTime FinishedAt { get; set; }
         }
 
+        private static int[] _stars = null;
+        
+        private static int[] StarsData
+        {
+            get
+            {
+                if (_stars != null) return _stars;
+            
+                string data = File.ReadAllText("./Data/StarsRating.json");
+
+                _stars = JArray.Parse(data).Select(x => x.Value<int>()).ToArray();
+
+                return _stars;
+            }
+        }
+
+        public static int GetUserStarsCount(long userId)
+        {
+            using (var conn = SqliteBaseRepository.SimpleDbConnection())
+            {
+                conn.Open();
+                
+                string sqlQuery = "SELECT DateFrom FROM AbsItem WHERE UserId = @UserId AND FinishedAt IS NULL";
+
+                DateTime date = conn.QuerySingle<DateTime>(sqlQuery, new {UserId = userId});
+
+                TimeSpan span = DateTime.Now - date;
+
+                int starsCount = 1;
+                
+                for (int i = 0; i < StarsData.Length; i++)
+                {
+                    int days = StarsData[i];
+
+                    if (days < (int) span.TotalDays)
+                    {
+                        continue;
+                    }
+
+                    starsCount = i;
+                    break;
+                }
+                
+                return starsCount;
+            }
+        }
+        
         public void AddDaysToUser(long userId, short daysCount)
         {
             using (var conn = SqliteBaseRepository.SimpleDbConnection())

@@ -34,6 +34,7 @@ namespace TgVozderzhansBot
             worker.Start();
             
             tgBot.AddCommandHandlers(
+                typeof(GetTopUsersCommandHandler),
                 typeof(ConfirmAbsistenceCommandHandler),
                 typeof(GetUserTermInfoCommandHandler),
                 typeof(GetMyTermInfoCommandHandler),

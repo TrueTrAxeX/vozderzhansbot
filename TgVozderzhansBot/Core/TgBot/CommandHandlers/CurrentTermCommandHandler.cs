@@ -34,9 +34,18 @@ namespace TgVozderzhansBot.Core.TgBot.CommandHandlers
 
             TimeSpan span = DateTime.Now - absItemRepository.CurrentTerm(userId);
             
-            var str = String.Format ("{0:00} дней, {1:00} часов, {2:00} минут, {3:00} секунд", span.Days, span.Hours, span.Minutes, span.Seconds); 
+            var str = String.Format ("{0:00} дней, {1:00} часов, {2:00} минут, {3:00} секунд", span.Days, span.Hours, span.Minutes, span.Seconds);
+
+            string rating = "Ваш рейтинг: ";
+
+            int stars = AbsItemRepository.GetUserStarsCount(userId);
+
+            for (int i = 0; i < stars; i++)
+            {
+                rating += "⭐";
+            }
             
-            string txt = $"Вы воздерживаетесь <b>{str}</b>";
+            string txt = $"{rating}\n\nВы воздерживаетесь <b>{str}</b>";
             
             InlineKeyboardButton button = new InlineKeyboardButton()
             {

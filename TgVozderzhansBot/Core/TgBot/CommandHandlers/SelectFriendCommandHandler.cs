@@ -44,25 +44,34 @@ namespace TgVozderzhansBot.Core.TgBot.CommandHandlers
             {
                 Models.User friend = userRepository.GetUserById(friendId);
 
-                DateTime dateFrom = absItemRepostory.CurrentTerm(friend.Id);
-            
-                TimeSpan span = DateTime.Now - dateFrom;
-            
-                var str = String.Format ("{0:00} дней, {1:00} часов, {2:00} минут, {3:00} секунд", span.Days, span.Hours, span.Minutes, span.Seconds); 
-
-                string rating = "Рейтинг: ";
-
-                int stars = AbsItemRepository.GetUserStarsCount(friend.Id);
+                DateTime? dateFrom = absItemRepostory.CurrentTerm(friendId);
                 
-                if (stars == 0) stars = 1;
+                string txt = null;
                 
-                for (int i = 0; i < stars; i++)
+                if (dateFrom != null)
                 {
-                    rating += "⭐";
-                }
+                    TimeSpan span = DateTime.Now - dateFrom.Value;
+            
+                    var str = String.Format ("{0:00} дней, {1:00} часов, {2:00} минут, {3:00} секунд", span.Days, span.Hours, span.Minutes, span.Seconds); 
 
-                string txt = $"Ваш друг <b>@{friend.Username}</b> воздерживается: <b>{str}</b>\n\n";
-                txt += rating;
+                    string rating = "Рейтинг: ";
+
+                    int stars = AbsItemRepository.GetUserStarsCount(friend.Id);
+                
+                    if (stars == 0) stars = 1;
+                
+                    for (int i = 0; i < stars; i++)
+                    {
+                        rating += "⭐";
+                    }
+
+                    txt = $"Ваш друг <b>@{friend.Username}</b> воздерживается: <b>{str}</b>\n\n";
+                    txt += rating;
+                }
+                else
+                {
+                    txt = $"Ваш друг @{friend.Username} в текущее время не воздерживается";
+                }
                 
                 List<InlineKeyboardButton> buttons = new List<InlineKeyboardButton>();
 

@@ -32,7 +32,7 @@ namespace TgVozderzhansBot.Core.TgBot.CommandHandlers
 
             var userId = userRepository.GetUserIdByChatId(update.CallbackQuery.Message.Chat.Id);
 
-            TimeSpan span = DateTime.Now - absItemRepository.CurrentTerm(userId);
+            TimeSpan span = DateTime.Now - absItemRepository.CurrentTerm(userId).Value;
             
             var str = String.Format ("{0:00} дней, {1:00} часов, {2:00} минут, {3:00} секунд", span.Days, span.Hours, span.Minutes, span.Seconds);
 

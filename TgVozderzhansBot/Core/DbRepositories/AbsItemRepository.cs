@@ -131,7 +131,7 @@ namespace TgVozderzhansBot.Core.DbRepositories
             }
         }
         
-        public DateTime CurrentTerm(long userId)
+        public DateTime? CurrentTerm(long userId)
         {
             using (var conn = SqliteBaseRepository.SimpleDbConnection())
             {
@@ -139,7 +139,7 @@ namespace TgVozderzhansBot.Core.DbRepositories
                 
                 string sqlQuery = "SELECT DateFrom FROM AbsItem WHERE UserId = @UserId AND FinishedAt IS NULL";
 
-                DateTime date = conn.QuerySingleOrDefault<DateTime>(sqlQuery, new {UserId = userId});
+                DateTime? date = conn.QuerySingleOrDefault<DateTime?>(sqlQuery, new {UserId = userId});
 
                 return date;
             }

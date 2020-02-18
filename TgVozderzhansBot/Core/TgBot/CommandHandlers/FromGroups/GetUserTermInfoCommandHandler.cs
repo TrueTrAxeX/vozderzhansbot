@@ -41,7 +41,7 @@ namespace TgVozderzhansBot.Core.TgBot.CommandHandlers.FromGroups
                 return;
             }
 
-            DateTime dateFrom = absItemRepository.CurrentTerm(userId.Value);
+            DateTime dateFrom = absItemRepository.CurrentTerm(userId.Value).Value;
             
             TimeSpan span = DateTime.Now - dateFrom;
             
